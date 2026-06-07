@@ -1,0 +1,4 @@
+[submodule "OoORiscv"]
+	path = OoORiscv
+	url = https://github.com/xiaokai-Huang/OoORiscv.git
+	branch = zext

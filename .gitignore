@@ -1,0 +1,12 @@
+325T-V3/*.log
+325T-v3/*.jou
+325T-v3/*.str
+325T-v3/zip/
+325T-v3/.Xil/
+325T-v3/pynq1*/
+!325T-v3/pynq1.srcs
+325T-v3/pynq1.srcs/sources_1/imports/src/*.zip
+325T-v3/pynq1.srcs/sources_1/imports/src/xsim.dir/
+325T-v3/pynq1.srcs/sources_1/imports/src/.codegraph/
+325T-v3/pynq1.srcs/sources_1/imports/src/.env
+325T-v3/pynq1.srcs/sources_1/imports/src/xvlog.pb
