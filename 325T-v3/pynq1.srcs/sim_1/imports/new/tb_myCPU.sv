@@ -132,19 +132,90 @@ module tb_myCPU;
     // 发送数据复用：自动发送期间使用 auto_tx_data，否则使用 VIO 的 vio_tx_data
     assign tx_data_mux = auto_active ? auto_tx_data : vio_tx_data;
 
+    // ===== virtual_seg 解码为 BCD =====
+    wire [39:0] w_virtual_seg;
+
+    // 7段码到BCD解码（共阴极，1=亮，与seg7.sv一致）
+    function [3:0] seg7_to_bcd;
+        input [6:0] seg;
+        case(seg)
+            7'b011_1111: seg7_to_bcd = 4'h0; // 0x3F
+            7'b000_0110: seg7_to_bcd = 4'h1; // 0x06
+            7'b101_1011: seg7_to_bcd = 4'h2; // 0x5B
+            7'h4f:       seg7_to_bcd = 4'h3; // 0x4F
+            7'h66:       seg7_to_bcd = 4'h4; // 0x66
+            7'h6d:       seg7_to_bcd = 4'h5; // 0x6D
+            7'h7d:       seg7_to_bcd = 4'h6; // 0x7D
+            7'h07:       seg7_to_bcd = 4'h7; // 0x07
+            7'h7f:       seg7_to_bcd = 4'h8; // 0x7F
+            7'h6f:       seg7_to_bcd = 4'h9; // 0x6F
+            7'h77:       seg7_to_bcd = 4'hA; // 0x77
+            7'h7c:       seg7_to_bcd = 4'hB; // 0x7C
+            7'h39:       seg7_to_bcd = 4'hC; // 0x39
+            7'h5e:       seg7_to_bcd = 4'hD; // 0x5E
+            7'h79:       seg7_to_bcd = 4'hE; // 0x79
+            7'h71:       seg7_to_bcd = 4'hF; // 0x71
+            default:     seg7_to_bcd = 4'hX;
+        endcase
+    endfunction
+
+    // 提取各段和ans
+    // display_seg 映射: seg4->s[31:28]/s[27:24], seg3->s[23:20]/s[19:16],
+    //                   seg2->s[15:12]/s[11:8],   seg1->s[7:4]/s[3:0]
+    // 高半字节(ans=10101010): digit1=seg1=s[7:4], digit4=seg4=s[31:28]
+    // 低半字节(ans=01010101): digit1=seg1=s[3:0], digit4=seg4=s[27:24]
+    logic [6:0] seg1, seg2, seg3, seg4;
+    logic [7:0] ans;
+    assign seg1 = w_virtual_seg[6:0];
+    assign seg2 = w_virtual_seg[16:10];
+    assign seg3 = w_virtual_seg[26:20];
+    assign seg4 = w_virtual_seg[36:30];
+    assign ans  = {w_virtual_seg[39:38], w_virtual_seg[29:28],
+                   w_virtual_seg[19:18], w_virtual_seg[9:8]};
+
+    // 锁存8个BCD数字，按正确的s[31:0]位序排列
+    // seg4是最高位，seg1是最低位
+    // 高半字节锁存: s[31:28]=seg4, s[23:20]=seg3, s[15:12]=seg2, s[7:4]=seg1
+    // 低半字节锁存: s[27:24]=seg4, s[19:16]=seg3, s[11:8]=seg2,  s[3:0]=seg1
+    logic [3:0] bcd8 [0:7];
+    always_ff @(posedge cpu_clk or negedge rst) begin
+        if (!rst) begin
+            bcd8[0] <= 4'h0; bcd8[1] <= 4'h0; bcd8[2] <= 4'h0; bcd8[3] <= 4'h0;
+            bcd8[4] <= 4'h0; bcd8[5] <= 4'h0; bcd8[6] <= 4'h0; bcd8[7] <= 4'h0;
+        end else if (ans == 8'b10101010) begin
+            // 高半字节: seg4=s[31:28], seg3=s[23:20], seg2=s[15:12], seg1=s[7:4]
+            bcd8[7] <= seg7_to_bcd(seg4); // s[31:28]
+            bcd8[5] <= seg7_to_bcd(seg3); // s[23:20]
+            bcd8[3] <= seg7_to_bcd(seg2); // s[15:12]
+            bcd8[1] <= seg7_to_bcd(seg1); // s[7:4]
+        end else if (ans == 8'b01010101) begin
+            // 低半字节: seg4=s[27:24], seg3=s[19:16], seg2=s[11:8], seg1=s[3:0]
+            bcd8[6] <= seg7_to_bcd(seg4); // s[27:24]
+            bcd8[4] <= seg7_to_bcd(seg3); // s[19:16]
+            bcd8[2] <= seg7_to_bcd(seg2); // s[11:8]
+            bcd8[0] <= seg7_to_bcd(seg1); // s[3:0]
+        end
+    end
+
+    // 合并为32位BCD总线 [31:0] = {bcd8[7], bcd8[6], ..., bcd8[0]}
+    wire [31:0] w_bcd_data = {bcd8[7], bcd8[6], bcd8[5], bcd8[4],
+                              bcd8[3], bcd8[2], bcd8[1], bcd8[0]};
+
     top uut (
-        .sysclk(clk),
-        .sw({1'b0, rst}),
-        // .i_sys_clk_n(~clk),
-        .rpio_15_r(top_uart_rx),
-        .rpio_14_r(top_uart_tx)
-        // .virtual_led(),  
-        // .virtual_seg()
+        .i_sys_clk_p(clk),
+        .i_sys_clk_n(~clk),
+        // .sw({1'b0, rst}),
+        .i_uart_rx(top_uart_rx),
+        .o_uart_tx(top_uart_tx),
+        .virtual_led(),
+        .virtual_seg(w_virtual_seg)
     );
 
     pll pll_inst(
-        .clk_in1(clk),
+        // .clk_in1(clk),
         // .clk_out1(w_clk_50Mhz),
+        .clk_in1_p(clk),
+        .clk_in1_n(~clk),
         .clk_out1(cpu_clk),
         .locked(rst)
     );
