@@ -59,20 +59,20 @@
     <Option Name="IPStaticSourceDir" Val="$PIPUSERFILESDIR/ipstatic"/>
     <Option Name="EnableBDX" Val="FALSE"/>
     <Option Name="FeatureSet" Val="FeatureSet_Classic"/>
-    <Option Name="WTXSimLaunchSim" Val="281"/>
+    <Option Name="WTXSimLaunchSim" Val="282"/>
     <Option Name="WTModelSimLaunchSim" Val="0"/>
     <Option Name="WTQuestaLaunchSim" Val="0"/>
     <Option Name="WTIesLaunchSim" Val="0"/>
     <Option Name="WTVcsLaunchSim" Val="0"/>
     <Option Name="WTRivieraLaunchSim" Val="0"/>
     <Option Name="WTActivehdlLaunchSim" Val="0"/>
-    <Option Name="WTXSimExportSim" Val="258"/>
-    <Option Name="WTModelSimExportSim" Val="258"/>
-    <Option Name="WTQuestaExportSim" Val="258"/>
+    <Option Name="WTXSimExportSim" Val="263"/>
+    <Option Name="WTModelSimExportSim" Val="263"/>
+    <Option Name="WTQuestaExportSim" Val="263"/>
     <Option Name="WTIesExportSim" Val="0"/>
-    <Option Name="WTVcsExportSim" Val="258"/>
-    <Option Name="WTRivieraExportSim" Val="258"/>
-    <Option Name="WTActivehdlExportSim" Val="258"/>
+    <Option Name="WTVcsExportSim" Val="263"/>
+    <Option Name="WTRivieraExportSim" Val="263"/>
+    <Option Name="WTActivehdlExportSim" Val="263"/>
     <Option Name="GenerateIPUpgradeLog" Val="TRUE"/>
     <Option Name="XSimRadix" Val="hex"/>
     <Option Name="XSimTimeUnit" Val="ns"/>
@@ -912,21 +912,6 @@
         <Option Name="TopAutoSet" Val="TRUE"/>
       </Config>
     </FileSet>
-    <FileSet Name="BRAM_IROM" Type="BlockSrcs" RelSrcDir="$PSRCDIR/BRAM_IROM" RelGenDir="$PGENDIR/BRAM_IROM">
-      <File Path="$PSRCDIR/sources_1/ip/BRAM_IROM/BRAM_IROM.xci">
-        <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/../dt5.3/digital_twin.srcs/sources_1/ip/BRAM_IROM/BRAM_IROM.xci"/>
-          <Attr Name="ImportTime" Val="1758273876"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <Config>
-        <Option Name="TopModule" Val="BRAM_IROM"/>
-        <Option Name="UseBlackboxStub" Val="1"/>
-      </Config>
-    </FileSet>
     <FileSet Name="Mem_BRAM_256K" Type="BlockSrcs" RelSrcDir="$PSRCDIR/Mem_BRAM_256K" RelGenDir="$PGENDIR/Mem_BRAM_256K">
       <File Path="$PSRCDIR/sources_1/ip/Mem_BRAM_256K/Mem_BRAM_256K.xci">
         <FileInfo>
@@ -939,6 +924,21 @@
       </File>
       <Config>
         <Option Name="TopModule" Val="Mem_BRAM_256K"/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="BRAM_IROM" Type="BlockSrcs" RelSrcDir="$PSRCDIR/BRAM_IROM" RelGenDir="$PGENDIR/BRAM_IROM">
+      <File Path="$PSRCDIR/sources_1/ip/BRAM_IROM/BRAM_IROM.xci">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../dt5.3/digital_twin.srcs/sources_1/ip/BRAM_IROM/BRAM_IROM.xci"/>
+          <Attr Name="ImportTime" Val="1758273876"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <Config>
+        <Option Name="TopModule" Val="BRAM_IROM"/>
         <Option Name="UseBlackboxStub" Val="1"/>
       </Config>
     </FileSet>
@@ -964,9 +964,7 @@
   <Runs Version="1" Minor="21">
     <Run Id="synth_1" Type="Ft3:Synth" SrcSet="sources_1" Part="xc7k325tffg900-2" ConstrsSet="constrs_1" Description="Higher performance designs, resource sharing is turned off, the global fanout guide is set to a lower number, FSM extraction forced to one-hot, LUT combining is disabled, equivalent registers are preserved, SRL are inferred  with a larger threshold" AutoIncrementalCheckpoint="true" IncrementalCheckpoint="$PSRCDIR/utils_1/imports/synth_1/top.dcp" WriteIncrSynthDcp="false" State="current" Dir="$PRUNDIR/synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/synth_1" AutoRQSDir="$PSRCDIR/utils_1/imports/synth_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Flow_PerfOptimized_high" Flow="Vivado Synthesis 2023">
-          <Desc>Higher performance designs, resource sharing is turned off, the global fanout guide is set to a lower number, FSM extraction forced to one-hot, LUT combining is disabled, equivalent registers are preserved, SRL are inferred  with a larger threshold</Desc>
-        </StratHandle>
+        <StratHandle Name="Flow_PerfOptimized_high" Flow="Vivado Synthesis 2023"/>
         <Step Id="synth_design">
           <Option Id="ControlSetOptThreshold">48</Option>
           <Option Id="Directive">7</Option>
@@ -983,7 +981,7 @@
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="BRAM_IROM_synth_1" Type="Ft3:Synth" SrcSet="BRAM_IROM" Part="xc7k325tffg900-2" ConstrsSet="BRAM_IROM" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/BRAM_IROM_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/BRAM_IROM_synth_1" AutoRQSDir="$PSRCDIR/utils_1/imports/BRAM_IROM_synth_1">
+    <Run Id="Mem_BRAM_256K_synth_1" Type="Ft3:Synth" SrcSet="Mem_BRAM_256K" Part="xc7k325tffg900-2" ConstrsSet="Mem_BRAM_256K" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/Mem_BRAM_256K_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/Mem_BRAM_256K_synth_1" AutoRQSDir="$PSRCDIR/utils_1/imports/Mem_BRAM_256K_synth_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2023"/>
         <Step Id="synth_design"/>
@@ -993,7 +991,7 @@
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="Mem_BRAM_256K_synth_1" Type="Ft3:Synth" SrcSet="Mem_BRAM_256K" Part="xc7k325tffg900-2" ConstrsSet="Mem_BRAM_256K" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/Mem_BRAM_256K_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/Mem_BRAM_256K_synth_1" AutoRQSDir="$PSRCDIR/utils_1/imports/Mem_BRAM_256K_synth_1">
+    <Run Id="BRAM_IROM_synth_1" Type="Ft3:Synth" SrcSet="BRAM_IROM" Part="xc7k325tffg900-2" ConstrsSet="BRAM_IROM" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/BRAM_IROM_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/BRAM_IROM_synth_1" AutoRQSDir="$PSRCDIR/utils_1/imports/BRAM_IROM_synth_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2023"/>
         <Step Id="synth_design"/>
@@ -1005,9 +1003,7 @@
     </Run>
     <Run Id="impl_1" Type="Ft2:EntireDesign" Part="xc7k325tffg900-2" ConstrsSet="constrs_1" Description="Similar to Peformance_Explore, but enables the physical optimization step (phys_opt_design) with the Explore directive after routing." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" State="current" Dir="$PRUNDIR/impl_1" SynthRun="synth_1" IncludeInArchive="true" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/impl_1" LaunchOptions="-jobs 8 " AutoRQSDir="$PSRCDIR/utils_1/imports/impl_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Performance_ExplorePostRoutePhysOpt" Flow="Vivado Implementation 2023">
-          <Desc>Similar to Peformance_Explore, but enables the physical optimization step (phys_opt_design) with the Explore directive after routing.</Desc>
-        </StratHandle>
+        <StratHandle Name="Performance_ExplorePostRoutePhysOpt" Flow="Vivado Implementation 2023"/>
         <Step Id="init_design"/>
         <Step Id="opt_design">
           <Option Id="Directive">0</Option>
@@ -1034,7 +1030,7 @@
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="BRAM_IROM_impl_1" Type="Ft2:EntireDesign" Part="xc7k325tffg900-2" ConstrsSet="BRAM_IROM" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="BRAM_IROM_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/BRAM_IROM_impl_1" AutoRQSDir="$PSRCDIR/utils_1/imports/BRAM_IROM_impl_1">
+    <Run Id="Mem_BRAM_256K_impl_1" Type="Ft2:EntireDesign" Part="xc7k325tffg900-2" ConstrsSet="Mem_BRAM_256K" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="Mem_BRAM_256K_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/Mem_BRAM_256K_impl_1" AutoRQSDir="$PSRCDIR/utils_1/imports/Mem_BRAM_256K_impl_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2023"/>
         <Step Id="init_design"/>
@@ -1051,7 +1047,7 @@
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="Mem_BRAM_256K_impl_1" Type="Ft2:EntireDesign" Part="xc7k325tffg900-2" ConstrsSet="Mem_BRAM_256K" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="Mem_BRAM_256K_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/Mem_BRAM_256K_impl_1" AutoRQSDir="$PSRCDIR/utils_1/imports/Mem_BRAM_256K_impl_1">
+    <Run Id="BRAM_IROM_impl_1" Type="Ft2:EntireDesign" Part="xc7k325tffg900-2" ConstrsSet="BRAM_IROM" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="BRAM_IROM_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/BRAM_IROM_impl_1" AutoRQSDir="$PSRCDIR/utils_1/imports/BRAM_IROM_impl_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2023"/>
         <Step Id="init_design"/>
